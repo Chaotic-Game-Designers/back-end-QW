@@ -1,5 +1,6 @@
 env
 .env
+qw-test.json
 db.sqlite3
 *\__pycache__
 __pycache__
