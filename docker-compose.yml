@@ -24,7 +24,7 @@ services:
 
   migrate:
     build: .  
-    container_name: django_migrate
+    container_name: django_migrate_
     command: ["sh", "-c", "python manage.py makemigrations && python manage.py migrate"]
     volumes:
       - .:/app
