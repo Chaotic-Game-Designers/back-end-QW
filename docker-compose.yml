@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+
+  web:
+    build: .
+    env_file:
+      - .env
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db  
+      - DB_PORT=5432
+      - DB_NAME=lebasee
+      - DB_USER=postgres
+      - DB_PASSWORD=13822003
+    networks:
+      - app_network
+
+  migrate:
+    build: .  
+    container_name: django_migrate
+    command: ["sh", "-c", "python manage.py makemigrations && python manage.py migrate"]
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=lebasee
+      - DB_USER=postgres
+      - DB_PASSWORD=13822003
+    networks:
+      - app_network
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: lebasee
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 13822003
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    networks:
+      - app_network
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
+    driver: bridge
