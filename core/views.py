@@ -7,8 +7,5 @@ from rest_framework.viewsets import GenericViewSet
 
 from .serializers import *
 
-# Create your views here.
-
-
 class CustomObtainPairView(TokenObtainPairView):
     serializer_class = TokenObtainSerializer

@@ -6,6 +6,4 @@ from . import views
 
 urlpatterns = [
     path("jwt/create/", views.CustomObtainPairView.as_view(), name="customtoken"),
-    path("", include("djoser.urls")),
-    path("", include("djoser.urls.jwt")),
 ]

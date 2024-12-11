@@ -181,30 +181,12 @@ REST_FRAMEWORK = {
 
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "API Documentation",
+    "TITLE": "QIWI Project",
 }
 
-DJOSER = {
-    "LOGIN_FIELD": "email",
-    "USER_CREATE_PASSWORD_RETYPE": False,
-    "USERNAME_CHANGED_EMAIL_CONFIRMATION": True,
-    "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
-    "SEND_CONFIRMATION_EMAIL": True,
-    "SET_PASSWORD_RETYPE": True,
-    "PASSWORD_RESET_CONFIRM_URL": "resetpassword/{uid}/{token}",
-    "USERNAME_RESET_CONFIRM_URL": "resetemail/{uid}/{token}",
-    "ACTIVATION_URL": "verification/{uid}/{token}",
-    "SEND_ACTIVATION_EMAIL": True,
-    "SERIALIZERS": {
-        "user_create": "core.serializers.UserCreateSerializer",
-        "user": "core.serializers.UserCreateSerializer",
-        "user_delete": "djoser.serializers.UserDeleteSerializer",
-    },
-}
 
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": (
-        "JWT",
         "Bearer",
     ),
     "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
