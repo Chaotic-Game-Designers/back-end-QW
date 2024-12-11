@@ -39,19 +39,19 @@ class TokenObtainSerializer(TokenObtainPairSerializer):
 
 User = get_user_model()
 
-
-class UserCreateSerializer(BaseUCS):
-    class Meta(BaseUCS.Meta):
-        model = User
-        fields = (
-            "id",
-            "email",
-            "password",
-        )
-
-
 class UserShortInformationSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
         fields = [ "email","username"]
+
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['email', 'username', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user

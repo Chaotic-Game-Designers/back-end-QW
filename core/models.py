@@ -36,6 +36,8 @@ class User(AbstractUser):
     email = models.EmailField(max_length=255, unique=True)
 
     objects = UserManager()
+    active_for_verify = models.BooleanField(default=False)
+    code = models.CharField(max_length=5)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username",]
