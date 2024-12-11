@@ -78,6 +78,7 @@ INSTALLED_APPS += [
 # Qiwi Apps:
 INSTALLED_APPS += [
     "core",
+    "notifications"
 ]
 
 MIDDLEWARE = [
