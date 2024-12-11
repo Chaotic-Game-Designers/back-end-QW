@@ -4,11 +4,12 @@ from firebase_admin import messaging
 import firebase_admin
 from firebase_admin import credentials
 
-cred = credentials.Certificate('./qw-test.json')
-firebase_admin.initialize_app(cred)
 
 
 def send_notification(request):
+    
+    cred = credentials.Certificate('./qw-test.json')
+    firebase_admin.initialize_app(cred)
     #change query
     tokens = DeviceToken.objects.get(user__email='t@t.ir')
 
