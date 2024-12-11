@@ -18,6 +18,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 deploy = env("deploy")
+hotel_email = env("hotel_email")
+password_email = env("password_email")
+
+
 
 if deploy == "True":
     # deploy

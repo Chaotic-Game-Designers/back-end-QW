@@ -7,7 +7,7 @@ from rest_framework import generics
 from rest_framework import status
 from .serializers import *
 import random
-
+from .utils import send_code_mail
 class CustomObtainPairView(TokenObtainPairView):
     serializer_class = TokenObtainSerializer
 
@@ -23,7 +23,7 @@ class UserRegisterView(generics.CreateAPIView):
         user.active_for_verify = True
         user.code = random.randint(10000, 99999)
         # send verify code 
-
+        send_code_mail(user.email, user.code)
 
         # save user and return data
         user.save()
