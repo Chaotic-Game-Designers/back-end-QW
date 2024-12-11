@@ -4,10 +4,7 @@ from firebase_admin import messaging
 import firebase_admin
 from firebase_admin import credentials
 
-
-
 def send_notification(request):
-    
     cred = credentials.Certificate('./qw-test.json')
     firebase_admin.initialize_app(cred)
     #change query
