@@ -22,8 +22,11 @@ class UserRegisterView(generics.CreateAPIView):
         user = serializer.save()
         user.active_for_verify = True
         user.code = random.randint(10000, 99999)
+        if request.data.get('referral_code'):
+            user.referral_action(request.data.get('referral_code'))
+        
         # send verify code 
-        send_code_mail(user.email, user.code)
+        # send_code_mail(user.email, user.code)
 
         # save user and return data
         user.save()

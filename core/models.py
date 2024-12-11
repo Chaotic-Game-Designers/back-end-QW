@@ -39,10 +39,27 @@ class User(AbstractUser):
     active_for_verify = models.BooleanField(default=False)
     code = models.CharField(max_length=5)
 
+    
+
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username",]
 
     def __str__(self) -> str:
         return self.email
-
     
+    def referral_action(self,code):
+        try:
+            ref = Referral.objects.get(code=code)
+            ref.invited.add(self)
+            ref.save()
+        except Referral.DoesNotExist:
+            pass
+    
+    
+class Referral(models.Model):
+    user = models.OneToOneField(User,related_name='referral',on_delete=models.CASCADE,blank=True,null=True)
+    invited = models.ManyToManyField(User,related_name='ref_address')
+    code = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.code   
