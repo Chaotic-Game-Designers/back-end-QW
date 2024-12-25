@@ -4,8 +4,12 @@ from rest_framework.routers import SimpleRouter
 
 from . import views
 
+rouer = SimpleRouter()
+rouer.register("profile", views.UserProfileViewSet)
+
 urlpatterns = [
     path("jwt/create/", views.CustomObtainPairView.as_view(), name="customtoken"),
     path("", include("djoser.urls")),
     path("", include("djoser.urls.jwt")),
+    path("", include(rouer.urls)),
 ]
