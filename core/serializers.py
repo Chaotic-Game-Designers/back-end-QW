@@ -5,7 +5,8 @@ from rest_framework import serializers, exceptions
 from .models import *
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.settings import api_settings
-
+import random,string
+from .models import Referral
 
 class TokenObtainSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -40,22 +41,25 @@ class TokenObtainSerializer(TokenObtainPairSerializer):
 
 User = get_user_model()
 
-
-class UserCreateSerializer(BaseUCS):
-    class Meta(BaseUCS.Meta):
-        model = User
-        fields = (
-            "id",
-            "email",
-            "password",
-        )
+# class UserShortInformationSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = [ "email","username"]
 
 
-class UserShortInformationSerializer(serializers.ModelSerializer):
 
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = [ "email","username"]
+        fields = ['email', 'username', 'password','id']
+        extra_kwargs = {'password': {'write_only': True},'id':{'read_only':True}}
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        ref = Referral(user = user, code=''.join(random.choices(string.ascii_lowercase, k=2)) + str(user.id) + ''.join(random.choices(string.ascii_lowercase, k=2)))
+        ref.save()
+        return user
+
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
