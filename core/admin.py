@@ -4,6 +4,8 @@ from .models import *
 
 admin.site.register(Referral)
 
+admin.site.register(UserProfile)
+
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     ordering=['email']

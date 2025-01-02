@@ -3,11 +3,13 @@ from rest_framework.decorators import action
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.generics import GenericAPIView
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import viewsets, permissions, status
-
+from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, DestroyModelMixin, RetrieveModelMixin
+from django.shortcuts import get_object_or_404
 from .serializers import *
 import random
 from .utils import send_code_mail
@@ -61,23 +63,30 @@ class VerifyUserApiView(generics.CreateAPIView):
 
 
 
+class CustomObtainPairView(TokenObtainPairView):
+    serializer_class = TokenObtainSerializer
 
-class UserProfileViewSet(viewsets.ModelViewSet):
-    queryset = UserProfile.objects.select_related("user")  
-    serializer_class = UserProfileSerializer
+
+class UserProfileDetail(GenericAPIView, CreateModelMixin, UpdateModelMixin, DestroyModelMixin, RetrieveModelMixin):
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserProfileSerializer
 
-    def get_queryset(self):
-        
-        return UserProfile.objects.filter(user=self.request.user)
+    def get_object(self):
+        return get_object_or_404(UserProfile, user=self.request.user)
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
-    def create(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         if UserProfile.objects.filter(user=request.user).exists():
             return Response(
                 {"detail": "You already have a profile."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        return super().create(request, *args, **kwargs)
+        return self.create(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
