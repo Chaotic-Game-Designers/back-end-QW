@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import update_last_login
 from djoser.serializers import UserCreateSerializer as BaseUCS
 from rest_framework import serializers, exceptions
+from .models import *
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.settings import api_settings
 import random,string
@@ -40,10 +41,10 @@ class TokenObtainSerializer(TokenObtainPairSerializer):
 
 User = get_user_model()
 
-class UserShortInformationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = [ "email","username"]
+# class UserShortInformationSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = [ "email","username"]
 
 
 
@@ -58,3 +59,17 @@ class UserSerializer(serializers.ModelSerializer):
         ref = Referral(user = user, code=''.join(random.choices(string.ascii_lowercase, k=2)) + str(user.id) + ''.join(random.choices(string.ascii_lowercase, k=2)))
         ref.save()
         return user
+
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ["id", "user","first_name","last_name", "profile_picture", "phone_number", "address", "date_of_birth"]
+        read_only_fields = ["id", "user"]  
+
+    def validate_phone_number(self, value):
+        if not value.isdigit():
+            raise serializers.ValidationError("Phone number must be numeric.")
+        return value
+    
